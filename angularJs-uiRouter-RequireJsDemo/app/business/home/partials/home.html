@@ -1,0 +1,18 @@
+
+
+
+<div >
+    <button  class="btn btn-primary btn-xs" ng-click="routerChange(state.local)"> 跳转到 路由 local</button>
+    <button class="btn btn-primary btn-xs" ng-click="routerChange(state.test)">跳转到 路由 test</button>
+    <button class="btn btn-primary btn-xs" ng-click="routerChange(state.showData)">跳转到 路由 showData</button>
+    <button class="btn btn-primary btn-xs" ng-click="routerChange(state.httpTest)"> 通过本地配置deplyod下载数据 跳转到 路由 httpTest</button>
+    <button class="btn btn-primary btn-xs" ng-click="routerChange(state.preView)">预览pdf</button>
+</div>
+
+<div class="container" >
+    <p>{{str}}</p><br/>
+    过滤器应用：<span>{{sex | sexFilter}}</span><br/><br/>
+    Service应用：<span ng-repeat="book in books"> {{book.id + 1}} :{{book.name}}</span><br/><br/>'
+    <my-directive></my-directive>
+</div>
+
