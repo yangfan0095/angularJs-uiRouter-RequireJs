@@ -1,7 +1,4 @@
-# angularJs-uiRouter-RequireJsDemo
- angularJs-uiRouter-RequireJs  demo  实现模块按需求加载  路由配置 按需求加载 欢迎交流。
- 这个是我在本地写的一个demo  可以直接运行
-#作者：花剌子模
+作者：花剌子模
 链接：https://www.zhihu.com/question/33251004/answer/116589753
 来源：知乎
 著作权归作者所有，转载请联系作者获得授权。
