@@ -9,12 +9,16 @@
  本人文笔有限 直接说我是怎样实现的。
 
   首先在 mian.js中初始化模块
+  
  `require(["domReady!",'app'],function( document){
   angular.bootstrap(document, ['myModule'])
  })`
+ 
+ 
  初始化模块以后 需要重新注册各项服务 关于为何要这样 可以详细看答案 各位大神已经详细说明了
  AngularJS按需动态加载template和controller? 
 AngularJS按需动态加载template和controller? - 前端开发框架和库
+
 `var app = angular.module("myModule", ['ui.router']);
 app.config(function($controllerProvider,$compileProvider,$filterProvider,$provide,$stateProvider){
 app.register = {
@@ -27,6 +31,8 @@ service: $provide.service,
 factory:$provide.factory,
 stateProvider:$stateProvider
    };`
+   
+   
 这个文件返回 app 对象， 在另外一个文件中单独返回app.register , 这样 其他需要使用这些服务的 就不用写 app.register.controller("balabala 反正我是这样写的 。
 
 `define(["app"],function(app){
@@ -48,7 +54,7 @@ return
             }
 var strurl = ctrl;
 var ctrlName = strurl.substring(strurl.lastIndexOf('/')+1);
-//todo  字符串匹配校验待做！
+//todo  字符串匹配校验待做
             app.stateProvider.state(state,{
 url:"/"+ state,
 controller: ctrlName,
@@ -86,11 +92,12 @@ return deferred.promise;
 
 代码如下：
 先调用上面的routerState 方法 对其传参 ，执行完以后就配置好了 。
-`define(['config/routerconfig'],function(router){
-     router.routerState("routertest","app/business/home/partials/routertest.html","business/home/controllers/routertestCtrl");
-})`
+`define(['config/routerconfig'],function(router){`
+     `router.routerState("routertest","app/business/home/partials/routertest.html","business/home/controllers/routertestCtrl");`
+`})`
 
 在配置好了以后 点击上面配置的路由 可以跳转到刚配好的路由上去 
+
 `define(["business/home/config/routerconfig",'config/appregister'],function(routercongfig,app){
    app
       .controller('localCtrl',function($scope,$state){
@@ -109,7 +116,18 @@ return deferred.promise;
 
 
 
-补充一点 ，  1   之前有朋友下载了我的demo 打包出现问题 解释一下 ，因为angularJS控制器里面是注入服务多数情况下不是严格的 ["$scope",function($scope){}] 按照这种方式来写的 ，二是直接写成 app.controller(function($scope,$q,balabala){}) , 这种推断注入在项目运行时框架内可以识别 但是打包后 都变成 a ,b , c 了 所以最后会报注入错误， 项目打包的时候需要先用ngAnnotate  处理一下注入问题， 我是用的 gulp 工具做的处理  方法如下var gulp = require('gulp');var ngAnnotate = require('gulp-ng-annotate');gulp.task('default', function () {    return gulp.src('dashboard/app/**/*.js')        .pipe(ngAnnotate())        .pipe(gulp.dest('dist'));}); 通过这个任务流处理以后 就可以将原来推断注入全部转换成显式注入 然后呢  ，就可以愉快的打包了 。2 ,项目后期可以做通过控制路由来配置角色权限 以及其他操作 `$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+补充一点 ，  1   之前有朋友下载了我的demo 打包出现问题 解释一下 ，因为angularJS控制器里面是注入服务多数情况下不是严格的 ["$scope",function($scope){}] 按照这种方式来写的 ，二是直接写成 app.controller(function($scope,$q,balabala){}) , 这种推断注入在项目运行时框架内可以识别 但是打包后 都变成 a ,b , c 了 所以最后会报注入错误， 项目打包的时候需要先用ngAnnotate  处理一下注入问题， 我是用的 gulp 工具做的处理  方法如下
+
+`var gulp = require('gulp');
+var ngAnnotate = require('gulp-ng-annotate');
+gulp.task('default', function () { 
+  return gulp.src('dashboard/app/**/*.js')
+      		.pipe(ngAnnotate())        
+								.pipe(gulp.dest('dist'));})
+				
+				通过这个任务流处理以后 就可以将原来推断注入全部转换成显式注入 然后呢  ，就可以愉快的打包了 。2 ,项目后期可以做通过控制路由来配置角色权限 以及其他操作 
+				
+				`$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     $rootScope.routerToStateName = toState.name;
 if(toState.name =="login"){
         auth.setFormState(fromState.name);
