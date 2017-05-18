@@ -108,10 +108,6 @@ define(["business/home/config/routerconfig",'config/appregister'],function(route
 ------------------------------------2016/8/13
 
 
-作者：Fanyang
-链接：https://www.zhihu.com/question/33251004/answer/116589753
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 补充一点 ，  1   之前有朋友下载了我的demo 打包出现问题 解释一下 ，因为angularJS控制器里面是注入服务多数情况下不是严格的 ["$scope",function($scope){}] 按照这种方式来写的 ，二是直接写成 app.controller(function($scope,$q,balabala){}) , 这种推断注入在项目运行时框架内可以识别 但是打包后 都变成 a ,b , c 了 所以最后会报注入错误， 项目打包的时候需要先用ngAnnotate  处理一下注入问题， 我是用的 gulp 工具做的处理  方法如下var gulp = require('gulp');var ngAnnotate = require('gulp-ng-annotate');gulp.task('default', function () {    return gulp.src('dashboard/app/**/*.js')        .pipe(ngAnnotate())        .pipe(gulp.dest('dist'));}); 通过这个任务流处理以后 就可以将原来推断注入全部转换成显式注入 然后呢  ，就可以愉快的打包了 。2 ,项目后期可以做通过控制路由来配置角色权限 以及其他操作 $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     $rootScope.routerToStateName = toState.name;
